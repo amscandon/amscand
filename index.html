@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="wrapper">
+        <form id="loginForm">
+            <h3>Republic of the Philippines</h3>
+ 		<h3>Social Security System</h3>
+		<h4>Candon Branch</h4><br>
+		<h4>Employer Updating and Monitoring</h4><br>
+            <div class="input-box">
+		<h5>Username:</h5>
+                <input type="text" id="username" placeholder="Username" name="username" required>
+            </div>
+            <div class="input-box">
+		<h5>Password:</h5>
+                <input type="password" id="password" placeholder="Password" name="password" required>
+            </div>
+		<br>
+            <button type="submit" class="btn">Login</button>
+        </form>
+	<img src="ssslogo.jpg" alt="Footer Image" class="footer-image">
+	<h6>Ver. 1.0</h6>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycby_iza1oXIPtC0PKSduaYa2B4KBSOD8DYwJbvhfoP8d1gmgJyncg_Sm47iP5PShp3D2MA/exec'; // Replace with your web app URL
+
+            try {
+                const response = await fetch(scriptUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ username, password })
+                });
+                
+                const result = await response.text();
+                
+                if (result === 'Authenticated') {
+                    // Redirect to the result page with serial number if authentication is successful
+                    const serialNumber = new URLSearchParams(window.location.search).get('serialNumber');
+                    if (serialNumber) {
+                        window.location.href = `result.html?serialNumber=${encodeURIComponent(serialNumber)}`;
+                    } else {
+                        alert('Serial number is missing.');
+                    }
+                } else {
+                    alert('Invalid credentials.');
+                }
+            } catch (error) {
+                alert('An error occurred: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
